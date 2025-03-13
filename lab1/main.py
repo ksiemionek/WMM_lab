@@ -10,8 +10,51 @@ def ex2():
     pass
 
 
+# def ex3():
+#     A = 3
+#     N = 10
+#     signal = [A * (1 - (n % N) / N) for n in range(N)]
+
+#     values = [0, N, 4*N, 9*N]
+
+#     for value in values:
+#         with_zeros = np.zeros(N + value)
+#         with_zeros[:N] = signal
+
+#         amplitude_spectrum = np.abs(np.fft.fft(signal))
+#         plt.stem(amplitude_spectrum)
+#         plt.show()
+
+#         phase_spectrum = np.angle(np.fft.fft(signal))
+#         plt.stem(phase_spectrum)
+#         plt.show()
+
+
 def ex3():
-    pass
+    A = 3
+    N = 10
+    signal = np.array([A * (1 - (n % N) / N) for n in range(N)])
+    values = [0, N, 4*N, 9*N]
+
+    fig, axs = plt.subplots(len(values), 2, figsize=(12, 8))
+
+    for i, value in enumerate(values):
+        with_zeros = np.zeros(N + value)
+        with_zeros[:N] = signal
+
+        amp_spectrum = np.abs(np.fft.fft(with_zeros))
+        phase_spectrum = np.angle(np.fft.fft(with_zeros))
+
+        axs[i, 0].stem(amp_spectrum, linefmt='b', markerfmt='b', basefmt='b')
+        axs[i, 0].set_title(f'Widmo Amplitudowe ({int(value / 10)}N)')
+        axs[i, 0].grid(True)
+
+        axs[i, 1].stem(phase_spectrum, linefmt='r', markerfmt='r', basefmt='r')
+        axs[i, 1].set_title(f'Widmo Fazowe ({int(value / 10)}N)')
+        axs[i, 1].grid(True)
+
+    plt.tight_layout()
+    plt.show()
 
 
 def ex4():
@@ -79,5 +122,5 @@ def ex4():
 if __name__ == "__main__":
     # ex1()
     # ex2()
-    # ex3()
-    ex4()
+    ex3()
+    # ex4()
