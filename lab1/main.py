@@ -23,6 +23,17 @@ def ex4():
     N1 = 2048
     N2 = 3072
 
+    def signal_r(A1, A2, A3, f1, f2, f3, t):
+        return (A1 * np.sin(2 * np.pi * f1 * t) +
+                A2 * np.sin(2 * np.pi * f2 * t) +
+                A3 * np.sin(2 * np.pi * f3 * t))
+
+    def psd(signal):
+        N = len(signal)
+        fft_val = np.fft.fft(signal)
+        psd_values = 2 * np.abs(fft_val) / N
+        psd_values[0] = psd_values[0] / 2
+        return psd_values
 
 
 
