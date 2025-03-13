@@ -35,8 +35,10 @@ def ex4():
         psd_values[0] = psd_values[0] / 2
         return psd_values
 
-    s1 = np.array([signal_r(A1, A2, A3, f1, f2, f3, n / fs) for n in range(N1)])
-    s2 = np.array([signal_r(A1, A2, A3, f1, f2, f3, n / fs) for n in range(N2)])
+    s1 = np.array([signal_r(A1, A2, A3, f1, f2, f3, n / fs)
+                   for n in range(N1)])
+    s2 = np.array([signal_r(A1, A2, A3, f1, f2, f3, n / fs)
+                   for n in range(N2)])
 
     psd1 = psd(s1)
     freq1 = np.fft.fftfreq(N1, 1/fs)
@@ -59,20 +61,19 @@ def ex4():
     plt.subplot(2, 2, 3)
     plt.psd(s1, Fs=fs)
     plt.xlim(0, 12000)
-    plt.axvline(f1, color='r', linestyle='--', alpha=0.5, label='f1 = 3000 Hz')
-    plt.axvline(f2, color='g', linestyle='--', alpha=0.5, label='f2 = 4000 Hz')
-    plt.axvline(f3, color='b', linestyle='--', alpha=0.5, label='f3 = 10000 Hz')
+    plt.axvline(f1, color='r', linestyle='--', label='f1 = 3000 Hz')
+    plt.axvline(f2, color='g', linestyle='--', label='f2 = 4000 Hz')
+    plt.axvline(f3, color='b', linestyle='--', label='f3 = 10000 Hz')
 
     plt.subplot(2, 2, 4)
     plt.psd(s2, Fs=fs)
     plt.xlim(0, 12000)
-    plt.axvline(f1, color='r', linestyle='--', alpha=0.5, label='f1 = 3000 Hz')
-    plt.axvline(f2, color='g', linestyle='--', alpha=0.5, label='f2 = 4000 Hz')
-    plt.axvline(f3, color='b', linestyle='--', alpha=0.5, label='f3 = 10000 Hz')
+    plt.axvline(f1, color='r', linestyle='--', label='f1 = 3000 Hz')
+    plt.axvline(f2, color='g', linestyle='--', label='f2 = 4000 Hz')
+    plt.axvline(f3, color='b', linestyle='--', label='f3 = 10000 Hz')
 
     plt.tight_layout()
     plt.show()
-
 
 
 if __name__ == "__main__":
