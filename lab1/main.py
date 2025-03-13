@@ -10,26 +10,6 @@ def ex2():
     pass
 
 
-# def ex3():
-#     A = 3
-#     N = 10
-#     signal = [A * (1 - (n % N) / N) for n in range(N)]
-
-#     values = [0, N, 4*N, 9*N]
-
-#     for value in values:
-#         with_zeros = np.zeros(N + value)
-#         with_zeros[:N] = signal
-
-#         amplitude_spectrum = np.abs(np.fft.fft(signal))
-#         plt.stem(amplitude_spectrum)
-#         plt.show()
-
-#         phase_spectrum = np.angle(np.fft.fft(signal))
-#         plt.stem(phase_spectrum)
-#         plt.show()
-
-
 def ex3():
     A = 3
     N = 10
