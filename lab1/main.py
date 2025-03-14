@@ -44,7 +44,7 @@ def ex4():
     fs = 48000
 
     N1 = 2048
-    N2 = 3072
+    N2 = 3 * N1 // 2
 
     def signal_r(A1, A2, A3, f1, f2, f3, t):
         return (A1 * np.sin(2 * np.pi * f1 * t) +
@@ -64,10 +64,10 @@ def ex4():
                    for n in range(N2)])
 
     psd1 = psd(s1)
-    freq1 = np.fft.fftfreq(N1, 1/fs)
+    freq1 = np.fft.fftfreq(N1, 1 / fs)
 
     psd2 = psd(s2)
-    freq2 = np.fft.fftfreq(N2, 1/fs)
+    freq2 = np.fft.fftfreq(N2, 1 / fs)
 
     plt.figure(figsize=(12, 7))
 
@@ -103,4 +103,4 @@ if __name__ == "__main__":
     # ex1()
     # ex2()
     ex3()
-    # ex4()
+    ex4()
