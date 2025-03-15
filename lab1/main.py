@@ -7,7 +7,36 @@ def ex1():
 
 
 def ex2():
-    pass
+    amplitude, num_samples = 2, 48
+    shifts_list = [0, num_samples/4, num_samples/2, 3*num_samples/4]
+    shift_labels = ["0", "N/4", "N/2", "3N/4"]
+
+    signal_function = lambda n: amplitude * np.cos(2 * np.pi * n / num_samples)
+
+    sample_indices = np.arange(num_samples)
+    shifted_signals = [signal_function(sample_indices - shift) for shift in shifts_list]
+
+    fft_results = [np.fft.fft(signal) for signal in shifted_signals]
+    amplitude_spectra = [np.abs(fft) / num_samples for fft in fft_results]
+    phase_spectra = [np.angle(fft) for fft in fft_results]
+
+    eps_threshold = 1e-10
+    for amplitude_spectrum, phase_spectrum in zip(amplitude_spectra, phase_spectra):
+        phase_spectrum[amplitude_spectrum < eps_threshold] = 0
+        phase_spectrum[np.abs(phase_spectrum) < eps_threshold] = 0
+
+    fig, axes = plt.subplots(4, 2, figsize=(10, 12))
+
+    for i, (shifted_signal, amplitude_spectrum, phase_spectrum, shift_label) in enumerate(zip(shifted_signals, amplitude_spectra, phase_spectra, shift_labels,)):
+        axes[i, 0].stem(sample_indices, amplitude_spectrum, linefmt="g-", markerfmt="o", basefmt="r-")
+        axes[i, 0].set(title=f"Widmo amplitudowe {shift_label}", xlabel="N", ylabel="Amplituda")
+
+        axes[i, 1].stem(sample_indices, phase_spectrum, linefmt="c-", markerfmt="o", basefmt="r-")
+        axes[i, 1].set(title=f"Widmo fazowe {shift_label}", xlabel="N", ylabel="Faza (radiany)")
+        axes[i, 1].set_yticks([-np.pi, -np.pi/2, 0, np.pi/2, np.pi], ["-π", "-π/2", "0", "π/2", "π"])
+
+    plt.tight_layout()
+    plt.show()
 
 
 def ex3():
@@ -101,6 +130,6 @@ def ex4():
 
 if __name__ == "__main__":
     # ex1()
-    # ex2()
+    ex2()
     ex3()
     ex4()
