@@ -1,9 +1,83 @@
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
+import time
 
 def ex1():
-    pass
+    N_points = 8
+    period = 2  # okres
+    sampling_freq = N_points / period  # częstotliwość próbkowania
+    time_vals = np.linspace(0, period, N_points, endpoint=False)
+    signal = np.cos(np.pi * time_vals)  # Sygnał spróbkowany
+
+    fft_res = np.fft.fft(signal)
+    amp_spectrum = np.abs(fft_res) / N_points  # Normalizacja
+    frequencies = np.fft.fftfreq(N_points, d=period / N_points)
+    phases = np.angle(fft_res)
+    threshold = 1e-10  # wartość progowa dla amplitudy
+
+    for i in range(N_points):
+        if amp_spectrum[i] < threshold:
+            phases[i] = 0
+        else:
+            # Dla sygnału kosinusoidalnego faza powinna wynosić -pi lub pi dla głównych składników
+            if i != 0 and i != N_points // 2:  # Pomijamy składnik stały i Nyquista
+                phases[i] = np.pi if np.real(fft_res[i]) < 0 else 0
+
+    # Sprawdzanie twierdzenia Parsevala
+    parseval_check = np.sum(signal ** 2) == np.sum(np.abs(fft_res) ** 2) / N_points
+    print(f"Twierdzenie Parsevala: {np.sum(signal**2)} = {np.sum(np.abs(fft_res)**2) / N_points} jest {'prawdziwe' if parseval_check else 'nieprawdziwe'} ")
+
+    # Wykresy
+    plt.figure(figsize=(12, 4))
+
+    plt.subplot(1, 3, 1)
+    plt.stem(time_vals, signal, linefmt="b-", markerfmt="bo", basefmt="r-")
+    cos_time_x = np.arange(0, 1.75, step=0.0001)
+    cos_time_y = np.cos(np.pi * cos_time_x)
+    plt.plot(cos_time_x, cos_time_y, color="green")
+    plt.title("Sygnał spróbkowany")
+    plt.xlabel("Czas (n)")
+    plt.ylabel("Amplituda")
+
+    # Widmo amplitudowe
+    plt.subplot(1, 3, 2)
+    plt.stem(time_vals * sampling_freq, amp_spectrum, linefmt="b-", markerfmt="bo", basefmt="r-")
+    plt.title("Widmo amplitudowe")
+    plt.xlabel("N")
+    plt.ylabel("Amplituda")
+
+    # Widmo fazowe
+    plt.subplot(1, 3, 3)
+    plt.stem(time_vals * sampling_freq, phases, linefmt="b-", markerfmt="bo", basefmt="r-")
+    plt.title("Widmo fazowe")
+    plt.xlabel("N")
+    plt.ylabel("Faza")
+
+    plt.tight_layout()
+    plt.show()
+
+    # Obliczenia czasu obliczeń
+    N_sizes = [2 ** i for i in range(5, 15)]
+    computation_times = []
+    for size in N_sizes:
+        temp_times = []
+        for _ in range(1000):
+            time_signal = np.linspace(0, period, size, endpoint=False)
+            x = np.cos(np.pi * time_signal)
+            start_time = time.process_time()
+            _ = np.fft.fft(x)
+            end_time = time.process_time()
+            temp_times.append(end_time - start_time)
+        computation_times.append(np.average(temp_times))
+
+    # Wykres czasu wykonania
+    plt.figure(figsize=(8, 6))
+    plt.yscale('log', base=10)
+    plt.xscale('log', base=10)
+    plt.plot(N_sizes, computation_times)
+
+    plt.title("Czas wykonania dla innych n")
+    plt.show()
 
 
 def ex2():
@@ -129,7 +203,7 @@ def ex4():
 
 
 if __name__ == "__main__":
-    # ex1()
-    ex2()
-    ex3()
-    ex4()
+    ex1()
+    # ex2()
+    # ex3()
+    # ex4()
