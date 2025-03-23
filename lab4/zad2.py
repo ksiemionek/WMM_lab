@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from functions import calcPSNR
 
 
-img_original = cv2.imread("./images/girl_col.png")
+img_original = cv2.imread('./images/girl_col.png', cv2.IMREAD_UNCHANGED)
 
 img_yuv = cv2.cvtColor(img_original, cv2.COLOR_BGR2YUV)
 
