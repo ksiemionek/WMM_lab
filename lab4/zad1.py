@@ -33,7 +33,7 @@ for mask in masks:
     img_gaussian_blur = cv2.GaussianBlur(img_noise, mask, 0)
     psnr_gauss = calcPSNR(img_original, img_gaussian_blur)
 
-    img_median_blur = cv2.medianBlur(img_inoise, mask[0])
+    img_median_blur = cv2.medianBlur(img_noise, mask[0])
     psnr_median = calcPSNR(img_original, img_median_blur)
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
