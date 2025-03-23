@@ -33,12 +33,15 @@ hist_equalized = hist_equalized.flatten()
 axes[1, 0].plot(hist_original)
 axes[1, 0].set_title("Histogram - obraz oryginalny")
 axes[1, 0].set_xlim([0, 256])
+axes[1, 0].set_ylim([0, 9000])
 axes[1, 0].grid(True)
 
 axes[1, 1].plot(hist_equalized)
 axes[1, 1].set_title("Histogram - po wyrównaniu")
 axes[1, 1].set_xlim([0, 256])
+axes[1, 1].set_ylim([0, 9000])
 axes[1, 1].grid(True)
+
 
 plt.tight_layout()
 plt.savefig("./images/zad2_histogramy.png")

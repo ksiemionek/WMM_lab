@@ -39,7 +39,7 @@ axes[0].axis('off')
 
 for i, weight in enumerate(weights):
     img_gauss = cv2.GaussianBlur(img_original, (3, 3), 0)
-    img_laplace = cv2.Laplacian(img_original, cv2.CV_64F)
+    img_laplace = cv2.Laplacian(img_gauss, cv2.CV_64F)
     image = np.asarray(img_original, np.float64)
     img_out = cv2.addWeighted(image, 1, img_laplace, weight, 0)
     img_out = np.clip(img_out, 0, 255).astype(np.uint8)
@@ -53,7 +53,7 @@ plt.tight_layout()
 plt.savefig("./images/zad3_wyostrzone_gauss.png")
 plt.show()
 
-best_weight = -1.5
+best_weight = -3
 
 img_laplace = cv2.Laplacian(img_original, cv2.CV_64F)
 img_gauss = cv2.GaussianBlur(img_original, (3, 3), 0)
