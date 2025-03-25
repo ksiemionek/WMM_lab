@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import os
 
 
 def printi(img, img_title="image"):
@@ -49,3 +50,7 @@ def dwt(img):
     bandHH = cv2.sepFilter2D(img, cv2.CV_16S, maskH, maskH)[::2, ::2]
 
     return bandLL, bandLH, bandHL, bandHH
+
+
+def calc_bitrate(out_file_name, image):
+    return 8*os.stat(out_file_name).st_size/(image.shape[0]*image.shape[1])

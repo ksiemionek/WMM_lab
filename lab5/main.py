@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-from functions import calc_entropy, img_histogram, img_differential, dwt
+from functions import calc_entropy, img_histogram, img_differential, dwt, calc_bitrate
 
 
 img_original = cv2.imread('./images/girl_col.png', cv2.IMREAD_UNCHANGED)
@@ -90,5 +90,34 @@ axes[1, 1].plot(np.arange(-255, 256, 1), hist_hh)
 axes[1, 1].set_title(f"Entropia HH: {entropy_hh:.3f}")
 axes[1, 1].set_xlim([-255, 255])
 
+plt.tight_layout()
+plt.show()
+
+bitrate_mono = calc_bitrate('./images/girl_mono.png', img_mono)
+print(bitrate_mono)
+
+compare = [
+    entropy_mono,
+    entropy_hdiff,
+    entropy_ll,
+    entropy_lh,
+    entropy_hl,
+    entropy_hh,
+    bitrate_mono
+]
+
+labels = [
+    "Oryginał",
+    "Różnicowy",
+    "LL",
+    "LH",
+    "HL",
+    "HH",
+    "Przepływność PNG"
+]
+
+plt.figure(figsize=(10, 6))
+bars = plt.bar(labels, compare)
+plt.bar_label(bars, fmt=lambda x: f'{x:.3f}')
 plt.tight_layout()
 plt.show()
