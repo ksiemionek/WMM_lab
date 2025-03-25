@@ -54,3 +54,10 @@ def dwt(img):
 
 def calc_bitrate(out_file_name, image):
     return 8*os.stat(out_file_name).st_size/(image.shape[0]*image.shape[1])
+
+
+def calc_mse_psnr(img1, img2):
+    imax = 255.**2
+    mse = ((img1.astype(np.float64)-img2)**2).sum()/img1.size
+    psnr = 10.0*np.log10(imax/mse)
+    return (mse, psnr)

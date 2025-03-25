@@ -1,8 +1,10 @@
 import cv2
+import os
 import numpy as np
 from matplotlib import pyplot as plt
 from functions import (calc_entropy, img_histogram,
-                       img_differential, dwt, calc_bitrate)
+                       img_differential, dwt, calc_bitrate,
+                       calc_mse_psnr)
 
 # MONOCHROME
 
@@ -243,3 +245,50 @@ axes[1].set_xlim([0, 255])
 
 plt.tight_layout()
 plt.savefig('./images/yuv_rgb_hist.png')
+
+xx = []
+ym = []
+yp = []
+
+qualities = [1, 2, 5, 10, 15, 20, 30, 40, 50, 75, 80, 85, 90, 95, 96, 97, 98, 99, 100]
+
+for quality in qualities:
+    out_file_name = f"./qualities/out_image_q{quality:03d}.jpg"
+    cv2.imwrite(out_file_name, img_original, (cv2.IMWRITE_JPEG_QUALITY, quality))
+    image_compressed = cv2.imread(out_file_name, cv2.IMREAD_UNCHANGED)
+    bitrate = 8*os.stat(out_file_name).st_size/(img_original.shape[0]*img_original.shape[1])
+    mse, psnr = calc_mse_psnr(img_original, image_compressed)
+    xx.append(bitrate)
+    ym.append(mse)
+    yp.append(psnr)
+
+fig = plt.figure()
+fig.set_figwidth(fig.get_figwidth()*2)
+plt.suptitle("Charakterystyki R-D")
+plt.subplot(1, 2, 1)
+plt.plot(xx, ym, "-.")
+plt.title("MSE(R)")
+plt.xlabel("bitrate")
+plt.ylabel("MSE", labelpad=0)
+plt.subplot(1, 2, 2)
+plt.plot(xx, yp, "-o")
+plt.title("PSNR(R)")
+plt.xlabel("bitrate")
+plt.ylabel("PSNR [dB]", labelpad=0)
+plt.savefig('./images/rqb_qualities.png')
+
+selected_qualities = [2, 10, 20, 80, 95, 100]
+fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+
+for i, quality in enumerate(selected_qualities):
+    out_file_name = f"./qualities/out_image_q{quality:03d}.jpg"
+    image_compressed = cv2.imread(out_file_name, cv2.IMREAD_UNCHANGED)
+
+    row, col = divmod(i, 3)
+    axes[row, col].imshow(cv2.cvtColor(image_compressed, cv2.COLOR_BGR2RGB))
+    axes[row, col].set_title(f"Jakość: {quality}, Bitrate: {xx[qualities.index(quality)]}")
+    axes[row, col].axis('off')
+
+
+plt.tight_layout()
+plt.savefig('./images/quality_do_oceny.png')
